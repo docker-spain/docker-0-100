@@ -1,19 +1,41 @@
 version: '3'
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+  letsencrypt:
+    image : jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - ./certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - nginx-proxy:rw
   web:
     container_name: ${WEB_HOST}
     image: ${WEB_IMAGE_NAME}:${WEB_IMAGE_TAG}
     build: ./
     depends_on:
       - db
-    ports:
+    expose:
       - "${WEB_PORT}:8069"
     volumes:
       - odoo-web-data:/var/lib/odoo
       - ./config:/etc/odoo
       - ./extra-addons:/mnt/extra-addons
+      - ./1:/usr/share/nginx/html:ro
     environment:
-      - VIRTUAL_HOST=odoo14.marlonfalcon.com
+      - VIRTUAL_HOST=odoo14.marlonfalcon.com,www.odoo14.marlonfalcon.com
+      - LETSENCRYPT_HOST=odoo14.marlonfalcon.com,www.odoo14.marlonfalcon.com
+      - LETSENCRYPT_EMAIL=youremail@demo.com
     entrypoint: "/usr/bin/odoo -c /etc/odoo/odoo.conf"
     restart: always
   db:
