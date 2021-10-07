@@ -35,8 +35,8 @@ services:
     volumes:
       - .:/usr/share/nginx/html:ro
     environment:
-      - VIRTUAL_HOST=localhost
-      - LETSENCRYPT_HOST=localhost
+      - VIRTUAL_HOST=docker.marlonfalcon.com,www.docker.marlonfalcon.com
+      - LETSENCRYPT_HOST=docker.marlonfalcon.com,www.docker.marlonfalcon.com
       - LETSENCRYPT_EMAIL=youremail@demo.com
 
   # reactapp:
