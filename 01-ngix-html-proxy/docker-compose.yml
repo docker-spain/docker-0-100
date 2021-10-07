@@ -1,0 +1,37 @@
+nginx-proxy:
+  image: jwilder/nginx-proxy
+  restart: always
+  ports:
+    - "80:80"
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+
+www1:
+  image: nginx
+  restart: always
+  expose:
+    - "80"
+  volumes:
+    - ./1:/usr/share/nginx/html:ro
+  environment:
+    - VIRTUAL_HOST=marlon1.localhost
+
+www2:
+  image: nginx
+  restart: always
+  expose:
+    - "80"
+  volumes:
+    - ./2:/usr/share/nginx/html:ro
+  environment:
+    - VIRTUAL_HOST=marlon2.localhost
+
+www3:
+  image: nginx
+  restart: always
+  expose:
+    - "80"
+  volumes:
+    - ./3:/usr/share/nginx/html:ro
+  environment:
+    - VIRTUAL_HOST=localhost
