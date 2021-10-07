@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="tproject_state_view_tree" model="ir.ui.view">
+            <field name="name">tproject.state.view.tree</field>
+            <field name="model">tproject.state</field>
+            <field name="arch" type="xml">
+                <tree string="State">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tproject_state_view_form" model="ir.ui.view">
+            <field name="name">tproject.state.view.form</field>
+            <field name="model">tproject.state</field>
+            <field name="arch" type="xml">
+                <form string="State">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tproject_state_action" model="ir.actions.act_window">
+            <field name="name">Etapas de Proyectos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tproject.state</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="tproject_state_act" name="Etapas de Proyectos" parent="ticket_notes_categ" action="tproject_state_action" groups="ticket_pro.tiket_pro_user_group"/>
+    </data>
+</odoo>
