@@ -1,11 +1,49 @@
 version: "3"
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+  
+  letsencrypt:
+    image : jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - ./certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - nginx-proxy:rw
+
+  nginx:
+    image: nginx:latest
+    expose:
+      - "80"
+
   web:
-      container_name : exampleapp
-      restart: always
-      build: .
-      ports: 
-            - "3000:3000"
-      volumes:
-            - .:/usr/src/app
+    image: nginx
+    restart: always
+    expose:
+      - "80"
+    volumes:
+      - .:/usr/share/nginx/html:ro
+    environment:
+      - VIRTUAL_HOST=localhost
+      - LETSENCRYPT_HOST=localhost
+      - LETSENCRYPT_EMAIL=youremail@demo.com
+
+  # reactapp:
+  #     container_name : reactapp
+  #     restart: always
+  #     build: .
+  #     ports: 
+  #           - "3000"
+  #     volumes:
+  #           - .:/usr/src/app
