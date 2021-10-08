@@ -27,23 +27,23 @@ services:
     expose:
       - "80"
 
-  web:
-    image: nginx
-    restart: always
-    expose:
-      - "80"
-    volumes:
-      - .:/usr/share/nginx/html:ro
-    environment:
-      - VIRTUAL_HOST=docker.marlonfalcon.com,www.docker.marlonfalcon.com
-      - LETSENCRYPT_HOST=docker.marlonfalcon.com,www.docker.marlonfalcon.com
-      - LETSENCRYPT_EMAIL=youremail@demo.com
+  # web:
+  #   image: nginx
+  #   restart: always
+  #   expose:
+  #     - "80"
+  #   volumes:
+  #     - .:/usr/share/nginx/html:ro
+  #   environment:
+  #     - VIRTUAL_HOST=docker.marlonfalcon.com,www.docker.marlonfalcon.com
+  #     - LETSENCRYPT_HOST=docker.marlonfalcon.com,www.docker.marlonfalcon.com
+  #     - LETSENCRYPT_EMAIL=youremail@demo.com
 
-  # reactapp:
-  #     container_name : reactapp
-  #     restart: always
-  #     build: .
-  #     ports: 
-  #           - "3000"
-  #     volumes:
-  #           - .:/usr/src/app
+  reactapp:
+      container_name : reactapp
+      restart: always
+      build: .
+      expose: 
+            - "3000"
+      volumes:
+            - .:/usr/src/app
